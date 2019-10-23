@@ -20,4 +20,5 @@
 /src/Security/                  @tratcher @anurse
 /src/Servers/                   @tratcher @jkotalik @anurse @halter73
 /src/Shared/Http2               @aspnet/http2
+/src/Shared/test/Shared.Tests/Http2 @aspnet/http2
 /src/SignalR/                   @mikaelm12 @BrennanConroy @halter73 @anurse
