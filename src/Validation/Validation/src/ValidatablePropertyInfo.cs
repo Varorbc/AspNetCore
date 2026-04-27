@@ -79,7 +79,7 @@ public abstract class ValidatablePropertyInfo : IValidatableInfo
             DisplayName,
             DisplayNameAccessor,
             declaringType: DeclaringType,
-            context.ValidationOptions.LocalizationContext);
+            context.ValidationOptions.Localizer);
 
         context.ValidationContext.DisplayName = displayName;
         context.ValidationContext.MemberName = Name;
@@ -96,7 +96,7 @@ public abstract class ValidatablePropertyInfo : IValidatableInfo
             context.CurrentValidationPath = $"{originalPrefix}.{Name}";
         }
 
-        var localization = context.ValidationOptions.LocalizationContext;
+        var localization = context.ValidationOptions.Localizer;
         var propertyValue = _propertyInfo.GetValue(value);
         var validationAttributes = GetValidationAttributes();
 

@@ -89,56 +89,21 @@ public class ValidationOptions
 
     /// <summary>
     /// The IStringLocalizerFactory discovered from DI, set by <see cref="ValidationLocalizationAutoSetup"/>.
-    /// Used to lazily create <see cref="LocalizationContext"/> on first access.
+    /// Used to lazily create <see cref="Localizer"/> on first access.
     /// </summary>
     internal IStringLocalizerFactory? StringLocalizerFactory { get; set; }
 
-    private ValidationLocalizationContext? _localizationContext;
+    private ValidationLocalizer? _localizer;
 
     /// <summary>
-    /// The localization context, created lazily on first access from <see cref="StringLocalizerFactory"/>
-    /// and the current values of <see cref="LocalizerProvider"/>, <see cref="ErrorMessageKeyProvider"/>,
-    /// and <see cref="AttributeFormatters"/>. Lazy creation ensures that all IPostConfigureOptions
+    /// The localizer, created lazily on first access from <see cref="StringLocalizerFactory"/>
+    /// and the current configuration. Lazy creation ensures that all IPostConfigureOptions
     /// callbacks have run before the delegates are captured.
     /// </summary>
-    internal ValidationLocalizationContext? LocalizationContext =>
-        _localizationContext ??= StringLocalizerFactory is not null
-            ? new ValidationLocalizationContext(StringLocalizerFactory, LocalizerProvider, ErrorMessageKeyProvider, AttributeFormatters)
+    internal ValidationLocalizer? Localizer =>
+        _localizer ??= StringLocalizerFactory is not null
+            ? new ValidationLocalizer(StringLocalizerFactory, this)
             : null;
-
-    // TODO: Consider the design further - these methods expose localization resolution
-    // for external consumers (e.g., client-side validation attribute rendering) without
-    // leaking internal types. Evaluate whether a separate public interface/service would be better.
-
-    /// <summary>
-    /// Resolves a localized display name using the configured localization pipeline.
-    /// Returns the original <paramref name="displayName"/> if localization is not configured
-    /// or no localized value is found.
-    /// </summary>
-    /// <param name="displayName">The display name to localize (typically from <see cref="DisplayAttribute.Name"/>).</param>
-    /// <param name="declaringType">The type that declares the member, or <see langword="null"/> for parameters.</param>
-    /// <returns>The localized display name, or the original value if not found.</returns>
-    public string ResolveDisplayName(string displayName, Type? declaringType)
-        => LocalizationContext?.ResolveDisplayName(displayName, declaringType) ?? displayName;
-
-    /// <summary>
-    /// Resolves a localized, fully formatted error message for a validation attribute.
-    /// Returns <see langword="null"/> if localization is not configured, the attribute uses
-    /// its own resource-based localization, or no localized value is found.
-    /// </summary>
-    /// <param name="attribute">The validation attribute that produced the error.</param>
-    /// <param name="displayName">The (possibly localized) display name of the member.</param>
-    /// <param name="declaringType">The type that declares the member, or <see langword="null"/> for parameters.</param>
-    /// <returns>The localized error message, or <see langword="null"/> to use the attribute's default message.</returns>
-    public string? FormatErrorMessage(ValidationAttribute attribute, string displayName, Type? declaringType)
-    {
-        if (attribute.ErrorMessageResourceType is not null)
-        {
-            return null;
-        }
-
-        return LocalizationContext?.ResolveErrorMessage(attribute, displayName, declaringType);
-    }
 
     /// <summary>
     /// Attempts to get validation information for the specified type.

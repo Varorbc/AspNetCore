@@ -65,13 +65,13 @@ public abstract class ValidatableParameterInfo(
             DisplayName,
             DisplayNameAccessor,
             declaringType: null,
-            context.ValidationOptions.LocalizationContext);
+            context.ValidationOptions.Localizer);
 
         context.ValidationContext.DisplayName = displayName;
         context.ValidationContext.MemberName = Name;
 
         var validationAttributes = GetValidationAttributes();
-        var localization = context.ValidationOptions.LocalizationContext;
+        var localization = context.ValidationOptions.Localizer;
 
         // Check required attribute first
         if (_requiredAttribute is not null || validationAttributes.TryGetRequiredAttribute(out _requiredAttribute))

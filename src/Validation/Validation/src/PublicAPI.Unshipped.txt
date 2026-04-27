@@ -20,11 +20,13 @@ Microsoft.Extensions.Validation.ValidationAttributeFormatterRegistry.ValidationA
 Microsoft.Extensions.Validation.ValidatablePropertyInfo.ValidatablePropertyInfo(System.Type! declaringType, System.Type! propertyType, string! name, string? displayName, System.Func<string!>? displayNameAccessor) -> void
 *REMOVED*Microsoft.Extensions.Validation.ValidatableTypeInfo.ValidatableTypeInfo(System.Type! type, System.Collections.Generic.IReadOnlyList<Microsoft.Extensions.Validation.ValidatablePropertyInfo!>! members) -> void
 Microsoft.Extensions.Validation.ValidatableTypeInfo.ValidatableTypeInfo(System.Type! type, string? displayName, System.Func<string!>? displayNameAccessor, System.Collections.Generic.IReadOnlyList<Microsoft.Extensions.Validation.ValidatablePropertyInfo!>! members) -> void
+Microsoft.Extensions.Validation.ValidationLocalizer
+Microsoft.Extensions.Validation.ValidationLocalizer.ValidationLocalizer(Microsoft.Extensions.Localization.IStringLocalizerFactory! factory, Microsoft.Extensions.Validation.ValidationOptions! options) -> void
+Microsoft.Extensions.Validation.ValidationLocalizer.ResolveDisplayName(string! displayName, System.Type? declaringType) -> string!
+Microsoft.Extensions.Validation.ValidationLocalizer.ResolveErrorMessage(System.ComponentModel.DataAnnotations.ValidationAttribute! attribute, string! displayName, System.Type? declaringType) -> string?
 Microsoft.Extensions.Validation.ValidationOptions.AttributeFormatters.get -> Microsoft.Extensions.Validation.ValidationAttributeFormatterRegistry!
 Microsoft.Extensions.Validation.ValidationOptions.ErrorMessageKeyProvider.get -> System.Func<Microsoft.Extensions.Validation.ErrorMessageKeyContext, string?>?
 Microsoft.Extensions.Validation.ValidationOptions.ErrorMessageKeyProvider.set -> void
-Microsoft.Extensions.Validation.ValidationOptions.FormatErrorMessage(System.ComponentModel.DataAnnotations.ValidationAttribute! attribute, string! displayName, System.Type? declaringType) -> string?
 Microsoft.Extensions.Validation.ValidationOptions.LocalizerProvider.get -> System.Func<System.Type!, Microsoft.Extensions.Localization.IStringLocalizerFactory!, Microsoft.Extensions.Localization.IStringLocalizer!>?
 Microsoft.Extensions.Validation.ValidationOptions.LocalizerProvider.set -> void
-Microsoft.Extensions.Validation.ValidationOptions.ResolveDisplayName(string! displayName, System.Type? declaringType) -> string!
 static Microsoft.Extensions.DependencyInjection.ValidationServiceCollectionExtensions.AddValidationAttributeFormatter<TAttribute>(this Microsoft.Extensions.DependencyInjection.IServiceCollection! services, System.Func<TAttribute!, Microsoft.Extensions.Validation.IValidationAttributeFormatter!>! factory) -> Microsoft.Extensions.DependencyInjection.IServiceCollection!

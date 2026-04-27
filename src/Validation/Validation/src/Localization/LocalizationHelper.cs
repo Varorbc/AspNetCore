@@ -12,7 +12,7 @@ internal static class LocalizationHelper
         string? displayName,
         Func<string>? displayNameAccessor,
         Type? declaringType,
-        ValidationLocalizationContext? localization)
+        ValidationLocalizer? localizer)
     {
         if (displayNameAccessor?.Invoke() is string resourceDisplayName)
         {
@@ -20,10 +20,10 @@ internal static class LocalizationHelper
             return resourceDisplayName;
         }
 
-        if (displayName is not null && localization is not null)
+        if (displayName is not null && localizer is not null)
         {
             // Display name is localized using IStringLocalizer.
-            return localization.ResolveDisplayName(displayName, declaringType) ?? displayName;
+            return localizer.ResolveDisplayName(displayName, declaringType);
         }
 
         // No localization configured or no display name set.
@@ -39,15 +39,9 @@ internal static class LocalizationHelper
         ValidationAttribute attribute,
         Type? declaringType,
         string displayName,
-        ValidationLocalizationContext? localization)
+        ValidationLocalizer? localizer)
     {
-        if (attribute.ErrorMessageResourceType is not null)
-        {
-            // Error message is localized via a static property (typically generated from a resource file).
-            return null;
-        }
-
         // Error message is localized using IStringLocalizer.
-        return localization?.ResolveErrorMessage(attribute, displayName, declaringType);
+        return localizer?.ResolveErrorMessage(attribute, displayName, declaringType);
     }
 }

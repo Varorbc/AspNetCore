@@ -18,7 +18,7 @@ internal sealed class ValidationLocalizationAutoSetup(
         var factory = serviceProvider.GetService(typeof(IStringLocalizerFactory)) as IStringLocalizerFactory;
         if (factory is not null)
         {
-            // Store the factory only. The LocalizationContext is created lazily on first
+            // Store the factory only. The ValidationLocalizer is created lazily on first
             // access so that IPostConfigureOptions callbacks (e.g. from libraries that wrap
             // LocalizerProvider or ErrorMessageKeyProvider) have already run.
             options.StringLocalizerFactory = factory;

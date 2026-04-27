@@ -98,7 +98,7 @@ public abstract class ValidatableTypeInfo(
                 DisplayName,
                 DisplayNameAccessor,
                 declaringType: Type,
-                context.ValidationOptions.LocalizationContext);
+                context.ValidationOptions.Localizer);
 
             context.ValidationContext.DisplayName = displayName;
             context.ValidationContext.MemberName = null;
@@ -143,7 +143,7 @@ public abstract class ValidatableTypeInfo(
     {
         var validationAttributes = GetValidationAttributes();
         var errorPrefix = context.CurrentValidationPath;
-        var localization = context.ValidationOptions.LocalizationContext;
+        var localization = context.ValidationOptions.Localizer;
 
         for (var i = 0; i < validationAttributes.Length; i++)
         {

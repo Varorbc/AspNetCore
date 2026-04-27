@@ -55,8 +55,8 @@ public class LocalizationTests
         var provider = services.BuildServiceProvider();
         var options = provider.GetRequiredService<IOptions<ValidationOptions>>().Value;
 
-        Assert.NotNull(options.LocalizationContext);
-        var result = options.ResolveDisplayName("Customer Name", typeof(object));
+        Assert.NotNull(options.Localizer);
+        var result = options.Localizer!.ResolveDisplayName("Customer Name", typeof(object));
         Assert.Equal("Nom du client", result);
     }
 
@@ -365,14 +365,14 @@ public class LocalizationTests
         Assert.Equal("Shared: Name is required", context.ValidationErrors["Name"].First());
     }
 
-    // --- ValidationOptions public methods tests ---
+    // --- ValidationLocalizer tests ---
 
     [Fact]
     public void ResolveDisplayName_NoLocalization_ReturnsInput()
     {
         var options = new ValidationOptions();
 
-        Assert.Equal("TestName", options.ResolveDisplayName("TestName", typeof(object)));
+        Assert.Null(options.Localizer);
     }
 
     [Fact]
@@ -383,28 +383,28 @@ public class LocalizationTests
             ["TestName"] = "Translated"
         };
         var options = CreateOptionsWithLocalization(translations);
+        var localizer = options.Localizer!;
 
-        Assert.Equal("Translated", options.ResolveDisplayName("TestName", typeof(object)));
+        Assert.Equal("Translated", localizer.ResolveDisplayName("TestName", typeof(object)));
     }
 
     [Fact]
-    public void FormatErrorMessage_NoLocalization_ReturnsNull()
+    public void ResolveErrorMessage_NoLocalization_ReturnsNull()
     {
         var options = new ValidationOptions();
 
-        var result = options.FormatErrorMessage(new RequiredAttribute(), "Name", typeof(object));
-
-        Assert.Null(result);
+        Assert.Null(options.Localizer);
     }
 
     [Fact]
-    public void FormatErrorMessage_WithResourceType_ReturnsNull()
+    public void ResolveErrorMessage_WithResourceType_ReturnsNull()
     {
         var translations = new Dictionary<string, string>
         {
             ["Test"] = "Translated"
         };
         var options = CreateOptionsWithLocalization(translations);
+        var localizer = options.Localizer!;
 
         var attr = new RequiredAttribute
         {
@@ -412,37 +412,39 @@ public class LocalizationTests
             ErrorMessageResourceName = nameof(IntegrationResources.RequiredError)
         };
 
-        var result = options.FormatErrorMessage(attr, "Name", typeof(object));
+        var result = localizer.ResolveErrorMessage(attr, "Name", typeof(object));
 
         Assert.Null(result);
     }
 
     [Fact]
-    public void FormatErrorMessage_WithLocalization_ReturnsFormatted()
+    public void ResolveErrorMessage_WithLocalization_ReturnsFormatted()
     {
         var translations = new Dictionary<string, string>
         {
             ["RequiredError"] = "Le champ {0} est obligatoire."
         };
         var options = CreateOptionsWithLocalization(translations);
+        var localizer = options.Localizer!;
 
         var attr = new RequiredAttribute { ErrorMessage = "RequiredError" };
-        var result = options.FormatErrorMessage(attr, "Name", typeof(object));
+        var result = localizer.ResolveErrorMessage(attr, "Name", typeof(object));
 
         Assert.Equal("Le champ Name est obligatoire.", result);
     }
 
     [Fact]
-    public void FormatErrorMessage_RangeAttribute_FormatsArgs()
+    public void ResolveErrorMessage_RangeAttribute_FormatsArgs()
     {
         var translations = new Dictionary<string, string>
         {
             ["RangeError"] = "{0} doit être entre {1} et {2}."
         };
         var options = CreateOptionsWithLocalization(translations);
+        var localizer = options.Localizer!;
 
         var attr = new RangeAttribute(1, 100) { ErrorMessage = "RangeError" };
-        var result = options.FormatErrorMessage(attr, "Age", typeof(object));
+        var result = localizer.ResolveErrorMessage(attr, "Age", typeof(object));
 
         Assert.Equal("Age doit être entre 1 et 100.", result);
     }
